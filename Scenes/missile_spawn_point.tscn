@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://d1qr6h3xgvqe8"]
+
+[ext_resource type="Script" uid="uid://h32xuf7s661n" path="res://Scripts/missle_spawn_point.gd" id="1_gqj10"]
+
+[node name="MissileSpawnPoint" type="Node2D"]
+script = ExtResource("1_gqj10")
+range = 15.108
+effective_range = 8.351
+type = 1

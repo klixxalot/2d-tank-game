@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dxxa21f3lk6eq"]
+
+[ext_resource type="Script" uid="uid://dkkjgfm6e40q0" path="res://Scripts/trail.gd" id="1_ccptl"]
+
+[node name="Trail" type="Line2D"]
+texture_filter = 1
+script = ExtResource("1_ccptl")

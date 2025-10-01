@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://uwf75p1q3s7t"]
+
+[ext_resource type="Texture2D" uid="uid://cu34utqql3ig5" path="res://Sprites/Default size/tankBody_blue_outline.png" id="1_bgl1l"]
+[ext_resource type="Script" uid="uid://dg0p7flp5kj8a" path="res://Scripts/blue_tank_enemy.gd" id="1_d8bdh"]
+[ext_resource type="Script" uid="uid://cbbvx2df60vbv" path="res://Scripts/enemy_state_machine.gd" id="3_7ipof"]
+[ext_resource type="Script" uid="uid://diduhn8sx56x3" path="res://Scripts/States/EnemyIdleState.gd" id="4_knws1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_knws1"]
+radius = 25.02
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_d8bdh"]
+radius = 20.0998
+
+[node name="BlueTankEnemy" type="CharacterBody2D" groups=["Enemy"]]
+collision_layer = 3
+collision_mask = 3
+input_pickable = true
+script = ExtResource("1_d8bdh")
+health = 110.0
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_knws1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_bgl1l")
+
+[node name="EnemyStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("enemy", "initial_state")]
+script = ExtResource("3_7ipof")
+enemy = NodePath("..")
+initial_state = NodePath("EnemyIdleState")
+metadata/_custom_type_script = "uid://cbbvx2df60vbv"
+
+[node name="EnemyIdleState" type="Node" parent="EnemyStateMachine" node_paths=PackedStringArray("enemy")]
+script = ExtResource("4_knws1")
+enemy = NodePath("../..")
+metadata/_custom_type_script = "uid://diduhn8sx56x3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Enemy"]]
+shape = SubResource("CircleShape2D_d8bdh")
+
+[node name="TargetBox" type="ColorRect" parent="."]
+visible = false
+show_behind_parent = true
+light_mask = 3
+visibility_layer = 3
+offset_left = -23.0
+offset_top = -23.0
+offset_right = 23.0
+offset_bottom = 22.0
+color = Color(0.560784, 0, 0.0392157, 1)

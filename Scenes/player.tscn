@@ -1,0 +1,80 @@
+[gd_scene load_steps=14 format=3 uid="uid://dldvlpsgorlrf"]
+
+[ext_resource type="Texture2D" uid="uid://r36jiuq1wcmy" path="res://Sprites/Default size/tankBody_green.png" id="1_v0iea"]
+[ext_resource type="Script" uid="uid://hxw1uqgd2eqv" path="res://Scripts/player.gd" id="2_cvnsp"]
+[ext_resource type="Texture2D" uid="uid://by36o4nt1nus6" path="res://Sprites/Default size/tankGreenTurret.png" id="3_6t5aa"]
+[ext_resource type="Texture2D" uid="uid://ds8l7wkahnbbi" path="res://Sprites/Default size/tracksLarge.png" id="4_vgqql"]
+[ext_resource type="Script" uid="uid://wpwjrkkqs1jk" path="res://Scripts/player_state_machine.gd" id="5_3smsa"]
+[ext_resource type="Script" uid="uid://cogldcylu5e1h" path="res://Scripts/States/PlayerIdleState.gd" id="6_8erm5"]
+[ext_resource type="Script" uid="uid://0wh8fww017ak" path="res://Scripts/States/PlayerMovingState.gd" id="7_f1ek2"]
+[ext_resource type="Script" uid="uid://nesk061y0lvi" path="res://Scripts/States/PlayerAttackState.gd" id="8_8erm5"]
+[ext_resource type="PackedScene" uid="uid://d1qr6h3xgvqe8" path="res://Scenes/missile_spawn_point.tscn" id="9_f1ek2"]
+[ext_resource type="PackedScene" uid="uid://cs140tdkj0qsh" path="res://Scenes/bullet_blue.tscn" id="10_tx1dd"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cvnsp"]
+radius = 20.025
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vgqql"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vgqql"]
+gravity = Vector3(0, 0, 0)
+
+[node name="CharacterBody2D" type="CharacterBody2D" groups=["Player"]]
+rotation = 1.5708
+input_pickable = true
+motion_mode = 1
+wall_min_slide_angle = 0.174533
+script = ExtResource("2_cvnsp")
+speed = 0.05
+
+[node name="player" type="Sprite2D" parent="."]
+texture = ExtResource("1_v0iea")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_cvnsp")
+
+[node name="TankBarrel" type="Sprite2D" parent="."]
+position = Vector2(-0.0187113, -0.0514221)
+rotation = -3.14159
+texture = ExtResource("3_6t5aa")
+offset = Vector2(-0.0269037, 11.1493)
+
+[node name="TracksParticles" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_vgqql")
+emitting = false
+amount = 4
+texture = ExtResource("4_vgqql")
+lifetime = 1.6
+process_material = SubResource("ParticleProcessMaterial_vgqql")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="PlayerStateMachine" type="Node2D" parent="." node_paths=PackedStringArray("character", "initial_state")]
+script = ExtResource("5_3smsa")
+character = NodePath("..")
+initial_state = NodePath("PlayerIdleState")
+metadata/_custom_type_script = "uid://wpwjrkkqs1jk"
+
+[node name="PlayerIdleState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("player")]
+script = ExtResource("6_8erm5")
+player = NodePath("../..")
+metadata/_custom_type_script = "uid://cogldcylu5e1h"
+
+[node name="PlayerMovingState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("player")]
+script = ExtResource("7_f1ek2")
+player = NodePath("../..")
+metadata/_custom_type_script = "uid://0wh8fww017ak"
+
+[node name="PlayerAttackState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("player")]
+script = ExtResource("8_8erm5")
+player = NodePath("../..")
+metadata/_custom_type_script = "uid://nesk061y0lvi"
+
+[node name="MissileSpawnPoint" parent="." node_paths=PackedStringArray("player") instance=ExtResource("9_f1ek2")]
+position = Vector2(-2, 7.23998e-06)
+missile = ExtResource("10_tx1dd")
+range = 500.0
+effective_range = 500.0
+reload = 3.0
+speed = 275.0
+player = NodePath("..")

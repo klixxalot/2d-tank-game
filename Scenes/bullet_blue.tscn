@@ -1,0 +1,81 @@
+[gd_scene load_steps=12 format=3 uid="uid://cs140tdkj0qsh"]
+
+[ext_resource type="Script" uid="uid://dreufswyd6l6" path="res://Scripts/bullet_blue.gd" id="1_6g18f"]
+[ext_resource type="Texture2D" uid="uid://dk426vjyrc6i1" path="res://Sprites/Default size/bulletBlue1.png" id="1_inx5j"]
+[ext_resource type="Texture2D" uid="uid://bqdrx6da44pvy" path="res://Sprites/Default size/explosion1.png" id="3_ablhm"]
+[ext_resource type="Texture2D" uid="uid://bnye1tjtihw11" path="res://Sprites/Default size/explosion2.png" id="4_5s7vn"]
+[ext_resource type="Texture2D" uid="uid://c6gbnaok65gqg" path="res://Sprites/Default size/explosion3.png" id="5_v7k07"]
+[ext_resource type="Texture2D" uid="uid://1j7k37gd8idi" path="res://Sprites/Default size/explosion4.png" id="6_71cs8"]
+[ext_resource type="Texture2D" uid="uid://vckh2y577lh3" path="res://Sprites/Default size/explosion5.png" id="7_pej8w"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6g18f"]
+radius = 6.0
+
+[sub_resource type="Animation" id="Animation_u0v4c"]
+resource_name = "Explosion"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2, 0.233333, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("1_inx5j"), ExtResource("3_ablhm"), ExtResource("4_5s7vn"), ExtResource("5_v7k07"), ExtResource("6_71cs8"), ExtResource("7_pej8w")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_8x5wf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_inx5j")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j23yi"]
+_data = {
+&"Explosion": SubResource("Animation_u0v4c"),
+&"RESET": SubResource("Animation_8x5wf")
+}
+
+[node name="BulletBlue" type="RigidBody2D" groups=["Missile"]]
+collision_layer = 2
+collision_mask = 2
+gravity_scale = 0.0
+script = ExtResource("1_6g18f")
+
+[node name="Sprite2D" type="Sprite2D" parent="." groups=["Missile"]]
+rotation = 1.5708
+texture = ExtResource("1_inx5j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Missile"]]
+shape = SubResource("CircleShape2D_6g18f")
+
+[node name="Explosion" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_j23yi")
+}
